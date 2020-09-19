@@ -1,0 +1,15 @@
+{
+  "name": "ebookcentral-lowest-page-count",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js"
+  },
+  "author": "Vin Howe",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.4.1"
+  },
+  "devDependencies": {},
+  "description": ""
+}
