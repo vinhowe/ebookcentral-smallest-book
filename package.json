@@ -1,5 +1,5 @@
 {
-  "name": "ebookcentral-lowest-page-count",
+  "name": "ebookcentral-smallest-book",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
