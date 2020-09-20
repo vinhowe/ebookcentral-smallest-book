@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const args = require('minimist')(process.argv.slice(2));
 
-const sessionFileName = args.s || 'session.json';
+const sessionFileName = args.s && typeof(args.s) === "string" ? args.s : 'session.json';
 const outputFileName = typeof(args.o) === "string" ? args.o : 'books.json'
 
 const sessionFileData = fs.readFileSync(sessionFileName);
