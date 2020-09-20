@@ -8,6 +8,7 @@
   "author": "Vin Howe",
   "license": "MIT",
   "dependencies": {
+    "minimist": "^1.2.5",
     "playwright": "^1.4.1"
   },
   "devDependencies": {},

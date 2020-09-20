@@ -1,7 +1,10 @@
 const { webkit } = require('playwright');
 const fs = require('fs');
 
-const sessionFileName = process.argv[2] || 'session.json';
+const args = require('minimist')(process.argv.slice(2));
+
+const sessionFileName = args.s || 'session.json';
+const outputFileName = typeof(args.o) === "string" ? args.o : 'books.json'
 
 const sessionFileData = fs.readFileSync(sessionFileName);
 const sessionData = JSON.parse(sessionFileData);
@@ -18,18 +21,38 @@ const innerTextRegex = sessionData.regex;
 
   let lowestId;
   let lowestPageCount = Infinity;
+  
+  const books = []
+
+  process.stdout.write(`Loading data for ${ids.length} books`);
 
   for (id of ids) {
+      process.stdout.write(".");
       await page.goto(ebookcentralUrl.replace('{ID}', id));
       let pageCount = parseInt((await (await page.$(selector)).innerText()).match(RegExp(innerTextRegex))[0]);
-      console.log(`ID: ${id}, pages: ${pageCount}`);
+
       if (pageCount < lowestPageCount) {
           lowestId = id;
           lowestPageCount = pageCount;
       }
+
+      books.push({ id, pageCount })
   }
 
+  process.stdout.write("done\n\n");
   await browser.close();
+  books.sort((a, b) => a.pageCount - b.pageCount)
 
-  console.log(`Page with lowest page count is ${lowestId} with ${lowestPageCount} pages`);
+  console.log(`Book with lowest page count is ${lowestId} with ${lowestPageCount} pages\n`);
+
+  for (book of books) {
+    console.log(`ID: ${book.id}, pages: ${book.pageCount}`);
+  }
+
+  console.log();
+
+  if (args.o) {
+    console.log(`Outputting to ${outputFileName}`);
+    fs.writeFileSync(outputFileName, JSON.stringify(books, null, 4))
+  }
 })();
